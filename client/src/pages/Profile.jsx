@@ -20,6 +20,7 @@ import {
 } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 export default function Profile() {
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -28,6 +29,10 @@ export default function Profile() {
   const [fileUploadError, setFileUploadError] = useState(false);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showListingsError, setShowListingsError] = useState(false);
+  const [showRequestsError, setShowRequestsError] = useState(false);
+  const [userListings, setUserListings] = useState([]);
+  const [userRequests, setUserRequests] = useState([]);
  
   const dispatch = useDispatch();
 
@@ -71,15 +76,25 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
+      const requestOptions = {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`   //localStorage.getItem(token)
+        }
+      };
+          
       const res = await fetch(`/backend/user/update/${currentUser._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`
         },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
       if (data.success === false) {
+        console.log('failed to fetch - data.message === false')
         dispatch(updateUserFailure(data.message));
         return;
       }
@@ -94,10 +109,24 @@ export default function Profile() {
   const handleDeleteUser = async () => {
     try {
       dispatch(deleteUserStart());
+      const requestOptions = {
+        method: 'DELETE', 
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`   //localStorage.getItem(token)
+        }
+      };
+      console.log("inside handle delete user 1");
       const res = await fetch(`/backend/user/delete/${currentUser._id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem("access_token")}`   //localStorage.getItem(token)
+        }
       });
       const data = await res.json();
+      console.log("inside handle delete user 2");
+      localStorage.removeItem('access_token')
       if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
         return;
@@ -111,8 +140,22 @@ export default function Profile() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutUserStart());
-      const res = await fetch('/backend/auth/signout');
+      const requestOptions = {
+        method: 'GET', 
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`   //localStorage.getItem(token)
+        }
+      };
+      const res = await fetch('/backend/auth/signout', {
+        method: 'GET', 
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`   //localStorage.getItem(token)
+        }
+      });
       const data = await res.json();
+      localStorage.removeItem('access_token')
       if (data.success === false) {
         dispatch(signOutUserFailure(data.message));
         return;
@@ -123,7 +166,67 @@ export default function Profile() {
     }
   };
 
+  const handleListingDelete = async (listingId) => {
+    console.log("Inside handle Listing delete");
+    const requestOptions = {
+      method: 'DELETE', 
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`   //localStorage.getItem(token)
+      }
+    };
+    try {
+      const res = await fetch(`/backend/listing/delete/${listingId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`   //localStorage.getItem(token)
+        }
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const handleShowRequests = async () => {
+    try {
+      setShowRequestsError(false);
+
+      const res = await fetch(`/backend/request/get-userRequest/${currentUser._id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`   //localStorage.getItem(token)
+        }
+      });
+      const data = await res.json();
+    
+      if (data.success === false) {
+        setShowRequestsError(true);
+        console.log(data.message);
+        return;
+      }
+
+      setUserRequests(data);
+    } catch (error) {
+      setShowRequestsError(true);
+    }
+  };
+
+  console.log("make a new ListingItem for admin users");
+
   return (
+    <div>
+      <Header />
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
@@ -207,14 +310,51 @@ export default function Profile() {
       <p className='text-green-700 mt-5'>
         {updateSuccess ? 'User is updated successfully!' : ''}
       </p>
-      <button className='text-green-700 w-full'>
-        Show Listings
+      <button onClick = {handleShowRequests} className='text-green-700 w-full'>
+        Show Requests
       </button>
-      {/* <p className='text-red-700 mt-5'>
-        {showListingsError ? 'Error showing listings' : ''}
-      </p> */}
+      <p className='text-red-700 mt-5'>
+        {showRequestsError ? 'Error showing requests' : ''}
+      </p>
+
+      {userRequests && userRequests.length > 0 && (
+        <div className='flex flex-col gap-4'>
+          <h1 className='text-center mt-7 text-2xl font-semibold'>
+            Your Requests
+          </h1>
+          {userRequests.map((request) => (
+            <div
+              key={request._id}
+              className='border rounded-lg p-3 flex justify-between items-center gap-4' >
+                <img
+                  src={request.listingImages}
+                  alt='listing cover'
+                  className='h-16 w-16 object-contain'
+                />
+              <Link
+                className='text-slate-700 font-semibold  hover:underline truncate flex-1'
+                to={`/listing/${request.listingId}`}
+              >
+                <p>{request.listingName}</p>
+              </Link>
+
+              {/* <div className='flex flex-col item-center'>
+                <button
+                  onClick={() => handleListingDelete(listing._id)}
+                  className='text-red-700 uppercase'>
+                  Delete
+                </button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className='text-green-700 uppercase'>Edit</button>
+                </Link>
+              </div> */}
+            </div>
+          ))}
+        </div>
+      )}
 
       
+    </div>
     </div>
   );
 }

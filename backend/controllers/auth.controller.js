@@ -11,7 +11,13 @@ export const signup = async (req, res, next) => {
     await newUser.save();
     res.status(201).json("User created successfully!");
   } catch (error) {
-    next(error);
+    if (error.name === 'ValidationError') {
+      // Set status code to 400 for validation errors
+      return res.status(400).json({ message: 'Validation failed', error });
+    }
+    // Set status code to 500 for database errors
+    //return res.status(500).json({ message: 'Internal Server Error', error });
+    next(errorHandler(500, 'Internal Server Error'))
   }
 };
 
@@ -24,11 +30,7 @@ export const signin = async (req, res, next) => {
     if (!validPassword) return next(errorHandler(401, "Wrong credentials!"));
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
-    res
-      .cookie("access_token", token, {maxAge: 1000*60*10});
-
-      res.status(200)
-      .json(rest);
+    res.cookie("access_token", token, {httpOnly: false, maxAge: 12096000000, sameSite: 'none', secure: false}).status(200).json({rest, token});
   } catch (error) {
     next(error);
   }
@@ -36,7 +38,24 @@ export const signin = async (req, res, next) => {
 
 export const signOut = async (req, res, next) => {
   try {
-    res.clearCookie('access_token').status(200).json({message: "user has been signed out!"});
+    // Extract the authorization token from the headers
+    const authorizationHeader = req.headers.authorization;
+    
+    if (!authorizationHeader) {
+      // Handle case where authorization header is missing
+      return res.status(401).json({ message: "Authorization header missing" });
+    }
+
+    // Extract the token from the authorization header
+    const token = authorizationHeader.split(' ')[1]; // Assuming format is "Bearer <token>"
+
+    // Validate or use the token as needed
+    // For example, you might want to decode and verify the token
+    // using a library like jsonwebtoken
+
+    // Clear the access_token cookie
+    res.json({ message: "User has been signed out!" });
+
   } catch (error) {
     next(error);
   }

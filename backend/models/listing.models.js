@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const listingSchema = new mongoose.Schema(
   {
@@ -10,42 +10,48 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    monthlyRent: {
+    monthlyrent: {
       type: Number,
       required: true,
     },
-    securityDeposit: {
+    securitydeposit: {
       type: Number,
       required: true,
     },
-    sevenDaysFreeTrial: {
+
+    sevendaysfreetrial: {
       type: Boolean,
       default: false,
     },
-    freeRelocation: {
+    freerelocation: {
       type: Boolean,
       default: false,
     },
-    freeUpgrade: {
+    maintenance: {
       type: Boolean,
       default: false,
     },
-    availableForRent: {
+    freeupgrade: {
+      type: Boolean,
+      default: false,
+    },
+    availableforrent: {
       type: Number,
-      required: true,
     },
     imageUrls: {
-        type: Array,
-        required: true,
-      },
-      userRef: {
-        type: String,
-        required: true,
-      },
+      type: Array,
+      required: true,
+    },
+    userRef: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-const Listing = mongoose.model('Lisiting', listingSchema);
+const Listing = mongoose.model("Listing", listingSchema);
 
 export default Listing;
+
+//name, description, monthly rent, security deposit, free trial, relocation, maintenance, upgrade, time of rent, images, userRef

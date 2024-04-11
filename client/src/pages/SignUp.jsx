@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import Header from '../components/Header';
 
 
 export default function SignUp() {
@@ -18,7 +19,7 @@ export default function SignUp() {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await fetch('http://localhost:5001/backend/auth/signup', {
+      const res = await fetch('/backend/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,7 +27,6 @@ export default function SignUp() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
       if (data.success === false) {
         setLoading(false);
         setError(data.message);
@@ -41,6 +41,8 @@ export default function SignUp() {
     }
   };
   return (
+    <div>
+      <Header />
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Sign Up</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
@@ -81,6 +83,7 @@ export default function SignUp() {
         </Link>
       </div>
       {error && <p className='text-red-500 mt-5'>{error}</p>}
+    </div>
     </div>
   );
 }

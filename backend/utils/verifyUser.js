@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { errorHandler } from './error.js';
 
 export const verifyToken = (req, res, next) => {
-  const token = req.cookies.access_token;
+  const token = req.headers.authorization.split(' ')[1];
 
   if (!token) return next(errorHandler(401, 'Unauthorized'));
 
@@ -13,3 +13,18 @@ export const verifyToken = (req, res, next) => {
     next();
   });
 };
+
+// {
+//   "name" : "listing test",
+//   "description" :"testdescript" ,
+//   "monthlyrent" : "12344",
+//   "securitydeposit": "50",
+//   "sevendaysfreetrial": "true" ,
+//   "freerelocation": "false",
+//   "maintenance" : "false",
+//   "freeupgrade": "true",
+//   "avaiablefrorent" : "3",
+//   "imageUrls": ["chjeinw", "cedwfrc"],
+//   "userRef": "dfuuytreertyuihcd"
+
+// }

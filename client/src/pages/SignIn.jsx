@@ -3,6 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux'
 import { signInStart, signInSuccess, signInFailure} from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
+import Header from '../components/Header';
+//import { C } from 'vite/dist/node/chunks/dep-G-px366b';
+// jwt from "jsonwebtoken";
+
 
 
 export default function SignIn(){
@@ -22,14 +26,18 @@ export default function SignIn(){
     e.preventDefault();
     try {
       dispatch(signInStart());
-      const res = await fetch('http://localhost:5001/backend/auth/signin', {
+      const res = await fetch('/backend/auth/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      });      const data = await res.json();
-      console.log(data);
+      });
+      
+      const {rest, token} = await res.json();
+      const data = rest;
+      //const token = jwt.sign({ id: res._id }, process.env.JWT_SECRET);
+      localStorage.setItem("access_token", token);
       if (data.success === false) {
         console.log(data.message);
         dispatch(signInFailure(data.message));
@@ -42,6 +50,8 @@ export default function SignIn(){
     }
   };
   return (
+    <div>
+      <Header />
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl text-center font-semibold my-7'>Sign In</h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
@@ -74,7 +84,14 @@ export default function SignIn(){
           <span className='text-blue-700'>Sign Up</span>
         </Link>
       </div>
+      <div className='flex gap-2 mt-2'>
+        <p>Want to rent? Sign in as Landlord !</p>
+        <Link to={'/adminsign-in'}>
+          <span className='text-blue-700'>Landlord Sign in</span>
+        </Link>
+      </div>
       {error && <p className='text-red-500 mt-5'>{error}</p>}
+    </div>
     </div>
   );
 }
