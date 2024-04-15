@@ -49,7 +49,7 @@ export const test = (req, res) => {
     next(error);
   }
   };
-
+ 
   export const getUserListings = async (req, res, next) => {
     console.log("inside user controller");
 

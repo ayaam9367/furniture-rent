@@ -114,7 +114,9 @@ export default function Profile() {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`, //localStorage.getItem(token)
         },
       };
-      console.log("inside handle delete user 1");
+      console.log("inside handle delete user 31");
+      console.log(currentUser._id);
+      console.log('ertyui');
       const res = await fetch(`/backend/user/delete/${currentUser._id}`, {
         method: "DELETE",
         headers: {
