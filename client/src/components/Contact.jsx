@@ -11,7 +11,7 @@ export default function Contact({ listing }) {
   useEffect(() => {
     const fetchLandlord = async () => {
       try {
-        const res = await fetch(`http://localhost:5001/backend/user/${listing.userRef}`);
+        const res = await fetch(`/backend/user/${listing.userRef}`);
         const data = await res.json();
         setLandlord(data);
       } catch (error) {

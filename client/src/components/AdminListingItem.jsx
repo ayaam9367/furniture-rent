@@ -11,6 +11,7 @@ export default function AdminListingItem({ listing }) {
   }
 
   const handleListingDelete = async (listingId) => {
+    
     const requestOptions = {
       method: "DELETE",
       headers: {
@@ -20,7 +21,7 @@ export default function AdminListingItem({ listing }) {
     };
     try {
       const res = await fetch(
-        `http://localhost:5001/backend/listing/delete/${listingId}`,
+        `/backend/listing/delete/${listingId}`,
         {
           method: "DELETE",
           headers: {
@@ -78,7 +79,7 @@ export default function AdminListingItem({ listing }) {
           
         </div>
         </Link>
-          <div className="">
+          <div className="p-3">
            
               <button onClick={() => handleClick()} className="text-green-700 uppercase">Edit</button>
            

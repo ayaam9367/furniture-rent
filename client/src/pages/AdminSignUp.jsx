@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AdminHeader from "../components/AdminHeader";
 
+
 export default function AdminSignUp() {
     const [formData, setFormData] = useState({});
     const [error, setError] = useState(null);

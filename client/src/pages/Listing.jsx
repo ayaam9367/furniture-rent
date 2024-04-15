@@ -25,6 +25,8 @@ export default function Listing() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [buttonText, setButtonText ]  = useState('Send Request');
+  const [requestSent, setRequestSent] = useState(false);
   const [contact, setContact] = useState(false);
   const params = useParams();
   const {currentUser} = useSelector((state) => state.user);
@@ -65,6 +67,10 @@ export default function Listing() {
         },
         body: JSON.stringify(requestData),
       })  
+      setTimeout(() => {
+        setRequestSent(true);
+        setButtonText('Request Sent');
+      }, 1000);
       
     } catch (error) {
       setError(error.message);
@@ -146,9 +152,17 @@ export default function Listing() {
             </p>
             
             <div className="flex gap-4">
-              <button onClick={() => {sendDataToAPI()}} className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                Send Request
-              </button>
+            <button
+      onClick={() => {
+        if (!requestSent) {
+          sendDataToAPI();
+        }
+      }}
+      className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md"
+    >
+      {buttonText}
+    </button>
+
             </div>
             <p className="text-slate-800">
               <span className="font-semibold text-black">Description - </span>

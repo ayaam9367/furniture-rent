@@ -35,7 +35,8 @@ export const getUserRequest = async(req, res, next) => {
 }
 
 
-   
+
+//gets complete request details
 export const getRequestDetails = async(req, res, next) => {
     try{ 
         
@@ -56,5 +57,30 @@ export const getRequestDetails = async(req, res, next) => {
         next(error);
     }
 }
+
+export const updateRequest = async(req, res, next) => {
+    console.log("inside update request controller")
+    const request = await Request.findById(req.params.id);
+    if(!request){
+        return next(errorHandler(404, 'request not found'));
+    }
+
+    try {
+        const updatedRequest = await Request.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {new: true}
+        );
+        res.status(200).json(updatedRequest)
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+
+
+
+
 
 //const {listingId, listingName, listingDescription, listingRent, listingDeposit, listingImages, clientId, clientName, clientEmail, sellerId, sellerName, sellerEmail, requestStatus, readStatus} = req.body;

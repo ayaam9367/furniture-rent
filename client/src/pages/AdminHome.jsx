@@ -39,7 +39,7 @@ export default function AdminHome() {
             Create Listing
           </h2>
         </Link>
-        <Link to={"/create-listing"}>
+        <Link to={"/admin-requests"}>
           {/*make the create-listing page admin only, that means, instead of verifying whether user has signed in or not, confirm whether user is admin or not */}
           <h2 className="bg-yellow-600 text-white p-3 rounded-lg uppercase text-center text-xl hover:opacity-95">
             Your Requests
@@ -48,7 +48,7 @@ export default function AdminHome() {
       </div>
       <hr className="p-6" />
       {userListings && (
-        <div className="p-14 px-3 mx-auto flex flex-wrap gap-4">
+        <div className="p-14 px-3 max-w-6xl mx-auto flex flex-wrap gap-4">
           {userListings &&
             userListings.map((listing) => (
               <AdminListingItem key={listing._id} listing={listing} />

@@ -17,6 +17,7 @@ dotenv.config({
 });
 
 const __dirname = path.resolve();
+console.log(__dirname);
 
 const app = express();
 app.use(express.json());

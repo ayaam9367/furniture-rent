@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+// listingId, listingName, listingDescription, listingRent, listingDeposit, listingImages, clientId, clientName, clientEmail, sellerId, requestStatus, readStatus
 const requestSchema = new mongoose.Schema(
     {
         listingId : {

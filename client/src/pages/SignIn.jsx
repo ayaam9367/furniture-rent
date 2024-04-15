@@ -85,9 +85,9 @@ export default function SignIn(){
         </Link>
       </div>
       <div className='flex gap-2 mt-2'>
-        <p>Want to rent? Sign in as Landlord !</p>
+        <p>Want to rent?</p>
         <Link to={'/adminsign-in'}>
-          <span className='text-blue-700'>Landlord Sign in</span>
+          <span className='text-blue-700'> Sign in as Landlord !</span>
         </Link>
       </div>
       {error && <p className='text-red-500 mt-5'>{error}</p>}
