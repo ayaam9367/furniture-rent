@@ -12,10 +12,19 @@ export default function PendingRequestItem({ request }) {
     requestStatus: false,
     readStatus: false,
   });
+  const [accept, setAccept] = useState((request.requestStatus === true && request.readStatus === true) ? 'Accepted' : 'Accept');
+  const [reject, setReject] = useState((request.requestStatus === false && request.readStatus === true) ? 'Rejected' : 'Reject');
+
 
   const handleAccept = async (e) => {
     console.log(request._id);
     const updatedFormData = { ...formData };
+    setFormData({
+      requestStatus : true,
+      readStatus : true,
+    })
+    
+    console.log(accept);
     updatedFormData.requestStatus = true;
     updatedFormData.readStatus = true;
     const requestOptions = {
@@ -45,6 +54,8 @@ export default function PendingRequestItem({ request }) {
         console.log(data.message);
         return;
       }
+      setAccept('Accepted')
+      setReject('')
 
       setRequestStatus(true);
     } catch (error) {
@@ -57,6 +68,10 @@ export default function PendingRequestItem({ request }) {
     const updatedFormData = { ...formData };
     updatedFormData.requestStatus = false;
     updatedFormData.readStatus = true;
+    setFormData({
+      requestStatus : false,
+      readStatus : true,
+    })
     const requestOptions = {
       method: "POST",
       header: {
@@ -84,7 +99,8 @@ export default function PendingRequestItem({ request }) {
         console.log(data.message);
         return;
       }
-
+      setReject('Rejected');
+      setAccept('')
       setRequestStatus(true);
     } catch (error) {
       console.log(error.message);
@@ -130,11 +146,15 @@ export default function PendingRequestItem({ request }) {
       </div>
       <div className="ml-3">
         <button onClick={handleAccept} className="text-green-700 ">
-          {request.requestStatus === true && request.readStatus === true ? "Accepted" : "Accept"}
+          {/* {request.requestStatus === true && request.readStatus === true ? "Accepted" : "Accept"} */}
+          {/* {formData.requestStatus === true && formData.readStatus === true ? "Accepted" : "Accept"} */}
+          {accept}
         </button>
 
         <button onClick={handleReject} className="text-red-700  mx-3">
-          {request.requestStatus === false && request.readStatus === true ? "Rejected" : "Reject"}
+          {/* {request.requestStatus === false && request.readStatus === true ? "Rejected" : "Reject"} */}
+          {/* {formData.requestStatus === false && formData.readStatus === true ? "Rejected" : "Reject"} */}
+          {reject}
         </button>
       </div>
     </div>

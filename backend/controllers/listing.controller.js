@@ -39,6 +39,7 @@ if(req.user.id !== listing.userRef){
     // }
   
     try {
+      console.log("123")
       const updatedListing = await Listing.findByIdAndUpdate(
         req.params.id,
         req.body,

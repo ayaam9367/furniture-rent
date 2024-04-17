@@ -15,6 +15,7 @@ node_modules
 dist
 dist-ssr
 *.local
+.nyc_output
 
 .env
 # Editor directories and files
