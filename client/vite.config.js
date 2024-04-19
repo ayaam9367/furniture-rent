@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/backend': {
-        target: 'http://localhost:5001',
+        target: 'http://13.236.6.37:5001/',
         secure: false,
       },
     },
