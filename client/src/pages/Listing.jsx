@@ -32,10 +32,7 @@ export default function Listing() {
   const {currentUser} = useSelector((state) => state.user);
 
 
-
-
 //listingId, listingName, listingDescription, listingRent, listingDeposit, listingImages, clientId, clientName, clientEmail, sellerId, sellerName, sellerEmail, requestStatus, readStatus
-
 
   // Function to handle button click
   const sendDataToAPI = async() => {
@@ -77,12 +74,6 @@ export default function Listing() {
     }
   };
 
-
-
-
-
-
-
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -122,13 +113,11 @@ export default function Listing() {
                   style={{
                     background: `url(${url}) center no-repeat  `,
                     backgroundSize: "cover ",
-
                   }}
                 ></div>
               </SwiperSlide>
             ))}
           </Swiper>
-
           <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
             <FaShare
               className="text-slate-500"

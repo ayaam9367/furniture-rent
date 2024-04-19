@@ -17,6 +17,7 @@ export default function Search() {
 
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -50,11 +51,24 @@ export default function Search() {
 
     const fetchListings = async () => {
       setLoading(true);
+      setShowMore(false);
       const searchQuery = urlParams.toString();
-      const res = await fetch(
-        `/backend/listing/get?${searchQuery}`
+      const res = await fetch(`/backend/listing/get?${searchQuery}`,
+      {
+
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      
+    }
       );
       const data = await res.json();
+      if (data.length > 8) {
+        setShowMore(true);
+      } else {
+        setShowMore(false);
+      }
       setListings(data);
       setLoading(false);
     };
@@ -103,109 +117,142 @@ export default function Search() {
     navigate(`/search?${searchQuery}`);
   };
 
+  const onShowMoreClick = async () => {
+    const numberOfListings = listings.length;
+    const startIndex = numberOfListings;
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set('startIndex', startIndex);
+    const searchQuery = urlParams.toString();
+    const res = await fetch(`/backend/listing/get?${searchQuery}`, 
+    {
+
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`, //localStorage.getItem(token)
+      },
+    
+  }
+    );
+    const data = await res.json();
+    if (data.length < 9) {
+      setShowMore(false);
+    }
+    setListings([...listings, ...data]);
+  };
+
   return (
     <div>
-      <Header/>
-    <div className="flex flex-col md:flex-row">
-      <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen w-2/5">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-          <div className="flex items-center gap-2">
-            <label className="whitespace-nowrap font-semibold">
-              Search Term:
-            </label>
-            <input
-              type="text"
-              id="searchTerm"
-              placeholder="Search..."
-              className="border rounded-lg p-3 w-full"
-              value={sidebarData.searchTerm}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex gap-2 flex-wrap items-center">
-            <label className="font-semibold">Perks:</label>
-            <div className="flex gap-2">
+      <Header />
+      <div className="flex flex-col md:flex-row">
+        <div className="p-7 border-b-2 md:border-r-2 md:min-h-screen w-2/5">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+            <div className="flex items-center gap-2">
+              <label className="whitespace-nowrap font-semibold">
+                Search Term:
+              </label>
               <input
-                type="checkbox"
-                id="freetrial"
-                className="w-5"
+                type="text"
+                id="searchTerm"
+                placeholder="Search..."
+                className="border rounded-lg p-3 w-full"
+                value={sidebarData.searchTerm}
                 onChange={handleChange}
-                checked={sidebarData.freetrial === true}
               />
-              <span>7 Days Free Trial</span>
             </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="relocation"
-                className="w-5"
+            <div className="flex gap-2 flex-wrap items-center">
+              <label className="font-semibold">Perks:</label>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="freetrial"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebarData.freetrial === true}
+                />
+                <span>7 Days Free Trial</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="relocation"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebarData.relocation === true}
+                />
+                <span>Free Relocation</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="maintenance"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebarData.maintenance === true}
+                />
+                <span>Yearly Maintenance</span>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="checkbox"
+                  id="upgrade"
+                  className="w-5"
+                  onChange={handleChange}
+                  checked={sidebarData.upgrade === true}
+                />
+                <span>Free Upgrade</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="font-semibold">Sort:</label>
+              <select
                 onChange={handleChange}
-                checked={sidebarData.relocation === true}
-              />
-              <span>Free Relocation</span>
+                defaultValue={"created_at_desc"}
+                id="sort_order"
+                className="border rounded-lg p-3"
+              >
+                <option value="regularPrice_desc">Price high to low</option>
+                <option value="regularPrice_asc">Price low to hight</option>
+                <option value="createdAt_desc">Latest</option>
+                <option value="createdAt_asc">Oldest</option>
+              </select>
             </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="maintenance"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebarData.maintenance === true}
-              />
-              <span>Yearly Maintenance</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="checkbox"
-                id="upgrade"
-                className="w-5"
-                onChange={handleChange}
-                checked={sidebarData.upgrade === true}
-              />
-              <span>Free Upgrade</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <label className="font-semibold">Sort:</label>
-            <select
-              onChange={handleChange}
-              defaultValue={"created_at_desc"}
-              id="sort_order"
-              className="border rounded-lg p-3"
-            >
-              <option value="regularPrice_desc">Price high to low</option>
-              <option value="regularPrice_asc">Price low to hight</option>
-              <option value="createdAt_desc">Latest</option>
-              <option value="createdAt_asc">Oldest</option>
-            </select>
-          </div>
-          <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95">
-            Search
-          </button>
-        </form>
-      </div>
-      <div className="flex-1">
-        <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
-          Listing results:
-        </h1>
-        <div className="p-7 flex flex-wrap gap-4">
-          {!loading && listings.length === 0 && (
-            <p className="text-xl text-slate-700">No listing found!</p>
-          )}
-          {loading && (
-            <p className="text-xl text-slate-700 text-center w-full">
-              Loading...
-            </p>
-          )}
+            <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95">
+              Search
+            </button>
+          </form>
+        </div>
+        <div className="flex-1">
+          <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
+            Listing results:
+          </h1>
+          <div className="p-7 flex flex-wrap gap-4">
+            {!loading && listings.length === 0 && (
+              <p className="text-xl text-slate-700">No listing found!</p>
+            )}
+            {loading && (
+              <p className="text-xl text-slate-700 text-center w-full">
+                Loading...
+              </p>
+            )}
 
-          {!loading &&
-            listings &&
-            listings.map((listing) => (
-              <ListingItem key={listing._id} listing={listing} />
-            ))}
+            {!loading &&
+              listings &&
+              listings.map((listing) => (
+                <ListingItem key={listing._id} listing={listing} />
+              ))}
+
+            {showMore && (
+              <button
+              onClick={onShowMoreClick}
+                className="text-green-700 hover:underline p-7 text-center w-full"
+              >
+                Show more
+              </button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

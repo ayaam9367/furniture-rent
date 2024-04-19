@@ -11,8 +11,25 @@ export default function Contact({ listing }) {
   useEffect(() => {
     const fetchLandlord = async () => {
       try {
-        const res = await fetch(`/backend/user/${listing.userRef}`);
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`, //localStorage.getItem(token)
+          },
+        };
+        console.log(listing.userRef)
+        const res = await fetch(`/backend/user/${listing.userRef}`,{
+
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`, //localStorage.getItem(token)
+            },
+          
+        });
         const data = await res.json();
+        console.log(data);
         setLandlord(data);
       } catch (error) {
         console.log(error);

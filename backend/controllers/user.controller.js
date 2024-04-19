@@ -67,7 +67,7 @@ export const test = (req, res) => {
 
   export const getUser = async(req, res, next) => {
     try {
-    
+    console.log("Inside get user")
       const user = await User.findById(req.params.id);
     
       if (!user) return next(errorHandler(404, 'User not found!'));
