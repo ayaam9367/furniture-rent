@@ -85,10 +85,7 @@ describe("signin controller", () => {
       await signin(req, res, next);
     
       console.log('res.json called:', res.json.calledOnce);
-     // expect(res.json.calledOnce).to.be.true;
-      //expect(res.status.calledOnceWith(200)).to.be.true;
-      // Add this line to debug
-      //expect(res.cookie.calledOnceWith("access_token", sinon.match.string, { httpOnly: false, maxAge: 12096000000, sameSite: 'none', secure: false })).to.be.true;
+     
     });
     
   

@@ -44,7 +44,7 @@ describe("updateListing controller", () => {
     //    .set("Authorization", "Bearer mocktoken")
         .send({});
 
-        //expect(res).to.have.status(200);
+       
   });
 });
 
@@ -60,7 +60,7 @@ describe("createListing controller", () => {
           title: "Test Listing",
           description: "This is a test listing.",
           price: 100,
-          // Add other required fields as needed
+          
         },
       };
       const res = {
@@ -74,7 +74,7 @@ describe("createListing controller", () => {
         title: "Test Listing",
         description: "This is a test listing.",
         price: 100,
-        // Add other fields as needed
+        
       };
   
       sinon.stub(Listing, "create").resolves(mockListing); // Stubbing Listing.create to resolve with mock data
@@ -124,7 +124,7 @@ describe("createListing controller", () => {
       const mockListing = {
         _id: "listing_id",
         userRef: "user_id",
-        // Add other fields as needed
+  
       };
   
       sinon.stub(Listing, "findById").resolves(mockListing); // Stubbing Listing.findById to resolve with mock data
@@ -163,7 +163,7 @@ describe("createListing controller", () => {
       const mockListing = {
         _id: "listing_id",
         userRef: "another_user_id", // Mock another user ID as the owner of the listing
-        // Add other fields as needed
+  
       };
   
       sinon.stub(Listing, "findById").resolves(mockListing); // Stubbing Listing.findById to resolve with mock data
@@ -185,7 +185,7 @@ describe("createListing controller", () => {
       const mockListing = {
         _id: "listing_id",
         userRef: "user_id",
-        // Add other fields as needed
+  
       };
   
       sinon.stub(Listing, "findById").resolves(mockListing); // Stubbing Listing.findById to resolve with mock data
@@ -211,7 +211,7 @@ describe("createListing controller", () => {
           // Mock updated listing data
           title: "Updated Title",
           description: "Updated Description",
-          // Add other fields as needed
+    
         },
       };
       const res = {
@@ -225,7 +225,7 @@ describe("createListing controller", () => {
         // Mock original listing data
         title: "Original Title",
         description: "Original Description",
-        // Add other fields as needed
+  
       };
   
       sinon.stub(Listing, "findById").resolves(mockListing); // Stubbing Listing.findById to resolve with mock data
@@ -245,7 +245,7 @@ describe("createListing controller", () => {
           // Mock updated listing data
           title: "Updated Title",
           description: "Updated Description",
-          // Add other fields as needed
+    
         },
       };
       const res = {};
@@ -266,7 +266,7 @@ describe("createListing controller", () => {
           // Mock updated listing data
           title: "Updated Title",
           description: "Updated Description",
-          // Add other fields as needed
+    
         },
       };
       const res = {};
@@ -277,7 +277,7 @@ describe("createListing controller", () => {
         // Mock original listing data
         title: "Original Title",
         description: "Original Description",
-        // Add other fields as needed
+  
       };
   
       sinon.stub(Listing, "findById").resolves(mockListing); // Stubbing Listing.findById to resolve with mock data
@@ -312,7 +312,7 @@ describe("createListing controller", () => {
         // Mock listing data
         title: "Test Listing",
         description: "Test Description",
-        // Add other fields as needed
+  
       };
   
       sinon.stub(Listing, "findById").resolves(mockListing); // Stubbing Listing.findById to resolve with mock data
@@ -395,9 +395,7 @@ describe("createListing controller", () => {
   
       await getListings(req, res, next);
   
-      //expect(res.status.calledOnceWith(200)).to.be.true;
-     // expect(res.json.calledOnce).to.be.true;
-     // expect(res.json.firstCall.args[0]).to.deep.equal(mockListings);
+     
     });
   
     it("should handle errors when fetching listings", async () => {
@@ -414,6 +412,6 @@ describe("createListing controller", () => {
   
       expect(next.calledOnce).to.be.true;
       expect(next.calledWithMatch(sinon.match.instanceOf(Error))).to.be.true;
-    //  expect(next.firstCall.args[0].message).to.equal(errorMessage);
+    
     });
 });

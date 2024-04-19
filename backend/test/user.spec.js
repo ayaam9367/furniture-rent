@@ -40,15 +40,7 @@ describe("updateUser controller", () => {
 
     await updateUser(req, res, next); // Call the updateUser function with mocked request, response, and next objects
 
-    // Assertions
-    //expect(res.status.calledOnceWith(200)).to.be.true; // Check if status function is called with 200 status code
-    //expect(res.json.calledOnce).to.be.true; // Check if json function is called once
-    //const returnedUser = res.json.firstCall.args[0]; // Get the arguments passed to the json function
-    // expect(returnedUser).to.deep.equal({
-    //   username: "new_username",
-    //   email: "new_email@example.com",
-    //   avatar: "new_avatar_url",
-    // }); // Check if the returned user object matches the expected user object
+   
   });
 
   it("should return 401 error if user tries to update another user's account", async () => {
@@ -122,10 +114,7 @@ describe("deleteUser controller", () => {
   
       await deleteUser(req, res, next);
   
-    //   expect(res.status.calledOnce).to.be.true;
-    //   expect(res.status.firstCall.args[0]).to.equal(200);
-    //   expect(res.json.calledOnce).to.be.true;
-    //   expect(res.json.firstCall.args[0]).to.equal("User has been deleted!");
+   
     });
   
     it("should return 401 error if user tries to delete another user's account", async () => {
@@ -192,10 +181,7 @@ describe("deleteUser controller", () => {
   
       await getUserListings(req, res, next);
   
-      // expect(res.status.calledOnce).to.be.true;
-      // expect(res.status.firstCall.args[0]).to.equal(200);
-      // expect(res.json.calledOnce).to.be.true;
-      // expect(res.json.firstCall.args[0]).to.deep.equal(mockListings);
+      
     });
   
     it("should return 401 error if user tries to view another user's listings", async () => {
@@ -262,13 +248,7 @@ describe("deleteUser controller", () => {
   
       await getUser(req, res, next);
   
-      // expect(res.status.calledOnce).to.be.true;
-      // expect(res.status.firstCall.args[0]).to.equal(200);
-      // expect(res.json.calledOnce).to.be.true;
-      // expect(res.json.firstCall.args[0]).to.deep.equal({
-      //   username: "test_user",
-      //   email: "test@example.com",
-      // });
+      
     });
   
     it("should return 404 error if user is not found", async () => {

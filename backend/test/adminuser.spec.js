@@ -43,8 +43,7 @@ describe("updateUser controller", () => {
   
       await updateUser(req, res, next);
   
-      //expect(res.status.calledOnceWith(200)).to.be.true;
-      //expect(res.json.calledOnceWith({ username: "new_username", email: "new_email@example.com", avatar: "new_avatar_url" })).to.be.true;
+     
     });
   
     it("should handle user unauthorized to update", async () => {
@@ -85,7 +84,7 @@ describe("updateUser controller", () => {
       const next = sinon.spy();
   
       const errorMessage = "Database error";
-      sinon.stub(Adminuser, "findByIdAndUpdate").rejects(new Error(errorMessage));
+     sinon.stub(Adminuser, "findByIdAndUpdate").rejects(new Error(errorMessage));
   
       await updateUser(req, res, next);
   
